@@ -59,8 +59,8 @@ server.post('/api/login', (req, res) => {
   
   
   function authorize(req, res, next) {
-    const username = req.headers['x-username'];
-    const password = req.headers['x-password'];
+    const username = req.username;
+    const password = req.password;
     
     Users.findBy({ username })
     .first()
@@ -77,12 +77,12 @@ server.post('/api/login', (req, res) => {
     });
   }
   
-  server.get('/api/users', authorize, (req, res) => {
+  server.get('/api/users',  (req, res) => {
     Users.find()
       .then(users => {
         res.json(users);
       })
-      .catch(err => res.send(err));
+      .catch(err => res.send({ err: 'error getting users' }));
   });
 
 const port = process.env.PORT || 5000;
